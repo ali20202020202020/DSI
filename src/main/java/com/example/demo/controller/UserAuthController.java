@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 @Controller
@@ -77,6 +75,37 @@ public class UserAuthController {
 
         return "users";
 
+    }
+
+    @RequestMapping("/users/edit/{id}")
+    public String editUserForm(@PathVariable Long id, Model model){
+        model.addAttribute("user", userService.getUserById(id));
+        return "edit_user";
+    }
+
+    @PostMapping("/users/{id}")
+    public String updateUser(@PathVariable Long id,
+                             @ModelAttribute("user") @Valid UserDto userDto,
+                             BindingResult result,
+                             Model model){
+        if (result.hasErrors()) {
+            model.addAttribute("user", userDto);
+            return "edit_user";
+        }
+
+        User existingUser = userService.getUserById(id);
+        existingUser.setFirstName(userDto.getFirstName());
+        existingUser.setLastName(userDto.getLastName());
+        existingUser.setEmail(userDto.getEmail());
+        userService.updateStudent(existingUser);
+        return "redirect:/users";
+    }
+
+    //Handler for Deletion
+    @GetMapping("/users/{id}")
+    public String deleteUser(@PathVariable Long id){
+        userService.deleteStudentById(id);
+        return "redirect:/users";
     }
 }
 

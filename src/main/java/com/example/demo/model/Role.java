@@ -20,7 +20,7 @@ public class Role {
     Long id;
     @Column(nullable=false, unique = true)
     String name;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles",cascade = CascadeType.ALL)
     List<User>users = new ArrayList<>();
 
     public Role(Long id, String name, List<User> users) {

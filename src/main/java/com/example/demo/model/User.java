@@ -17,7 +17,8 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Long id;
     @Column(nullable=false)
-    String name;
+    String firstName;
+    String lastName;
     String email;
     @Column(nullable=false, unique = true)
     String password;
@@ -29,9 +30,10 @@ public class User {
             )})
     public List<Role> roles = new ArrayList<>();
 
-    public User(Long id, String name, String email, String password, List<Role> roles) {
+    public User(Long id, String firstName,String LastName, String email, String password, List<Role> roles) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;

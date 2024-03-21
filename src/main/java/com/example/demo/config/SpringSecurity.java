@@ -21,10 +21,12 @@ public class SpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
 
         http.csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests((authz) -> authz
+                .authorizeRequests((authz) -> authz
                                 .requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/appointment_registration/**").permitAll()
+                                .requestMatchers("/patient_registration").permitAll()
                                 .requestMatchers("/index").permitAll()
-                                .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers("/users/**").hasRole("ADMIN")
                         // .and()
                 )
                 .formLogin(

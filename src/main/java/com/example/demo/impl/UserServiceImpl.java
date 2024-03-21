@@ -2,6 +2,7 @@ package com.example.demo.impl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDto studentDto) {
         User student = new User();
 
-        student.setName(studentDto.getFirstName() + " " +    studentDto.getLastName());
+        student.setFirstName(studentDto.getFirstName());
+        student.setLastName(studentDto.getLastName());
         student.setEmail(studentDto.getEmail());
 
         // Encrypt the password using Spring Security
@@ -61,12 +63,30 @@ public class UserServiceImpl implements UserService {
                 .map((student) -> mapToStudentDto(student))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public User getUserById(Long id) {
+       return userRepository.findById(id).get();
+    }
+
+
+
+
+    @Override
+    public User updateStudent(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteStudentById(Long id) {
+        userRepository.deleteById(id);
+    }
+
     private UserDto mapToStudentDto(User student) {
         UserDto studentDto = new UserDto();
-
-        String[] str = student.getName().split(" ");
-        studentDto.setFirstName(str[0]);
-        studentDto.setLastName(str[1]);
+        studentDto.setId(student.getId());
+        studentDto.setFirstName(student.getFirstName());
+        studentDto.setLastName(student.getLastName());
         studentDto.setEmail(student.getEmail());
         return studentDto;
     }
